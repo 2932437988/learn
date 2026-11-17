@@ -1,0 +1,81 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: W01-D6/cmake-template
+
+jobs:
+  build-test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake --preset ci
+        env: { CC: gcc-11, CXX: g++-11 }
+      - name: Build
+        run: cmake --build build-ci -j2
+      - name: Test
+        run: ctest --test-dir build-ci --output-on-failure
+
+  format:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check formatting
+        run: |
+          find include src apps tests examples tools -type f \
+            \( -name '*.cpp' -o -name '*.hpp' \) -print0 \
+            | xargs -0 -r clang-format-14 --dry-run --Werror
+
+  tidy:
+    runs-on: ubuntu-22.04
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (for compile_commands.json)
+        run: cmake --preset ci
+        env: { CC: gcc-11, CXX: g++-11 }
+      - name: Clang-tidy
+        run: run-clang-tidy-14.py -p build-ci -j 2 -header-filter='robot_template/'
+
+  sanitizers:
+    runs-on: ubuntu-22.04
+    needs: build-test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { sanitizer: asan,  flag: ENABLE_ASAN }
+          - { sanitizer: ubsan, flag: ENABLE_UBSAN }
+          - { sanitizer: tsan,  flag: ENABLE_TSAN }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: |
+          cmake -S . -B build-${{ matrix.sanitizer }} \
+            -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON \
+            -D${{ matrix.flag }}=ON
+        env: { CC: clang-14, CXX: clang++-14 }
+      - name: Build
+        run: cmake --build build-${{ matrix.sanitizer }} -j2
+      - name: Test
+        run: |
+          if [ "${{ matrix.sanitizer }}" = "tsan" ]; then
+            TSAN_OPTIONS=halt_on_error=1 setarch $(uname -m) -R \
+              ctest --test-dir build-${{ matrix.sanitizer }} --output-on-failure
+          else
+            ctest --test-dir build-${{ matrix.sanitizer }} --output-on-failure
+          fi
