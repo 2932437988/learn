@@ -7,3 +7,6 @@
 # 其他周次目录暂不纳入
 /W01-D*/
 !/W01-D6/
+W01-D6/cmake-template/tools/perf.data
+W01-D6/cmake-template/tools/perf_user.data
+W01-D6/cmake-template/tools/valgrind-before.log

@@ -1,0 +1,5 @@
+{
+    "capacity": 4,
+    "items": 1000,
+    "log_level": "info"
+}
