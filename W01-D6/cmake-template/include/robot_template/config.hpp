@@ -11,6 +11,6 @@ struct AppConfig {
 };
 
 // 读取 JSON 配置；文件打不开或字段非法时抛 std::runtime_error
-AppConfig load_config(const std::string &path);
+AppConfig load_config(const std::string& path);
 
 } // namespace robot_template

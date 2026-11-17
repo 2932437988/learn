@@ -14,8 +14,8 @@ public:
       throw std::invalid_argument("RingBuffer capacity must be > 0");
   }
 
-  RingBuffer(const RingBuffer &) = delete;
-  RingBuffer &operator=(const RingBuffer &) = delete;
+  RingBuffer(const RingBuffer&) = delete;
+  RingBuffer& operator=(const RingBuffer&) = delete;
 
   bool push(T value) {
     std::unique_lock<std::mutex> lk(m_);
@@ -81,7 +81,9 @@ public:
     return size_;
   }
 
-  std::size_t capacity() const { return cap_; }
+  std::size_t capacity() const {
+    return cap_;
+  }
 
 private:
   mutable std::mutex m_;

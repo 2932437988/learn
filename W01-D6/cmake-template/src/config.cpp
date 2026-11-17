@@ -6,7 +6,7 @@
 
 namespace robot_template {
 
-AppConfig load_config(const std::string &path) {
+AppConfig load_config(const std::string& path) {
   std::ifstream in(path);
   if (!in)
     throw std::runtime_error("cannot open config file: " + path);

@@ -6,7 +6,7 @@
 #include <string>
 #include <thread>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   const std::string path = (argc > 1) ? argv[1] : "config.json";
   try {
     const auto cfg = robot_template::load_config(path);
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     robot_template::log_info("sum = " + std::to_string(sum));
     std::cout << "sum = " << sum << '\n'; // 判据：0+1+...+(items-1)
     return 0;
-  } catch (const std::exception &e) {
+  } catch (const std::exception& e) {
     std::cerr << "demo failed: " << e.what() << '\n';
     return 1;
   }
