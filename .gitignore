@@ -1,0 +1,9 @@
+**/build/
+**/build-ci/
+**/compile_commands.json
+
+
+
+# 其他周次目录暂不纳入
+/W01-D*/
+!/W01-D6/
