@@ -10,3 +10,8 @@
 W01-D6/cmake-template/tools/perf.data
 W01-D6/cmake-template/tools/perf_user.data
 W01-D6/cmake-template/tools/valgrind-before.log
+
+# W02-D2 ROS 2 工作空间：构建产物，不入库
+W02-D2/build/
+W02-D2/install/
+W02-D2/log/
