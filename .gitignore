@@ -17,3 +17,6 @@ W02-D2/install/
 W02-D2/log/W02-D4/serial_recorder/build/
 W02-D4/serial_recorder/rec.jsonl
 W02-D4/serial_recorder/*.bin
+W02-D5/serial_recorder/build/
+W02-D5/serial_recorder/*.jsonl
+W02-D5/serial_recorder/*.bin

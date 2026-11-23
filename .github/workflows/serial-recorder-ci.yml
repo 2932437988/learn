@@ -1,0 +1,32 @@
+name: serial-recorder-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: serial-recorder-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: W02-D5/serial_recorder
+
+jobs:
+  build-test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libspdlog-dev nlohmann-json3-dev libgtest-dev
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build -j2
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
