@@ -1,0 +1,4 @@
+/configurable_node:
+  ros__parameters:
+    robot_name: "from_yaml"
+    max_speed: 1.2
