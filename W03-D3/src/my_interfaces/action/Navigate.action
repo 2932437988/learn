@@ -1,0 +1,13 @@
+# 目标：去哪个点
+float32 target_x
+float32 target_y
+---
+# 反馈：过程中持续汇报
+float32 current_x
+float32 current_y
+float32 distance_remaining
+---
+# 结果：最终停在哪、总耗时
+float32 final_x
+float32 final_y
+float32 elapsed_sec
